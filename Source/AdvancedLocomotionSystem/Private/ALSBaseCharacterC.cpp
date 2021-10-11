@@ -2,6 +2,9 @@
 
 
 #include "ALSBaseCharacterC.h"
+#include "MacroLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 // Sets default values
 AALSBaseCharacterC::AALSBaseCharacterC()
@@ -37,6 +40,7 @@ void AALSBaseCharacterC::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	
 }
 
 // Called every frame
@@ -51,6 +55,38 @@ void AALSBaseCharacterC::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+
+
+void AALSBaseCharacterC::GetCharacterCurrentStats(EMovementMode& PawnMovementMode, EALSMovementState& IMovementState,
+                                                  EALSMovementState& PrevMovementState, EALSMovementAction& MovementAction, EALSRotationMode& RotationMode,
+                                                  EALSGait& ActualGait, EALSStance& ActualStance, EALSViewMode& ViewMode, EALSOverlayState& OverlayState)
+{
+	PawnMovementMode = GetCharacterMovement()->MovementMode;
+	MovementState = EMovementState;
+	PrevMovementState = EPrevMovementState;
+	MovementAction = EMovementAction;
+	RotationMode = ERotationMode;
+	ActualGait = EGait;
+	ActualStance = EStance;
+	ViewMode = EViewMode;
+	OverlayState = EOverlayState;
+}
+
+void AALSBaseCharacterC::GetEssentialInformation(FVector& Velocity, FVector& Acceleration, FVector& MovementInput,
+	bool& IsMoving, bool& HasMovementInput, float& Speed, float& MovementInputAmount, FRotator& AimingRotation,
+	float& AimYawRate)
+{
+	Velocity = GetVelocity();
+	Acceleration = CPPAcceleration;
+	MovementInput = GetCharacterMovement()->GetCurrentAcceleration();
+	IsMoving = CPPIsMoving;
+	HasMovementInput = CPPHasMovementInput;
+	Speed = CPPSpeed;
+	MovementInputAmount = CPPMovementInputAmount;
+	AimingRotation = GetControlRotation();
+	AimYawRate = CPPAimYawRate;
 }
 
 void AALSBaseCharacterC::OnBeginPlay()
@@ -70,8 +106,7 @@ void AALSBaseCharacterC::OnBeginPlay()
 	}
 
 	//Set the Movement Model
-	AALSBaseCharacterC::SetMovementModel();
-	
+	SetMovementModel();
 	
 }
 

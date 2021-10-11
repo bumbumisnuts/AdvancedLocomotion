@@ -61,3 +61,12 @@ enum class EALSOverlayState : uint8
 	Box			UMETA(DisplayName = "Box"),
 	Barrel		UMETA(DisplayName = "Barrel")
 };
+UENUM(BlueprintType, Category = "MovementMode")
+enum class EALSMovementAction : uint8
+{
+	None		UMETA(DisplayName = "None"),
+	LowMantle	UMETA(DisplayName = "LowMantle"),
+	HighMantle	UMETA(DsiplayName = "HighMantle"),
+	Rolling		UMETA(DsiplayName = "Rolling"),
+	GettingUp	UMETA(DisplayName = "GettingUp")
+};

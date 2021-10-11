@@ -5,12 +5,15 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Enums.h"
+#include "Interface_Character.h"
 #include "Structs.h"
 #include "Engine/DataTable.h"
 #include "ALSBaseCharacterC.generated.h"
 
+
+
 UCLASS()
-class ADVANCEDLOCOMOTIONSYSTEM_API AALSBaseCharacterC : public ACharacter
+class ADVANCEDLOCOMOTIONSYSTEM_API AALSBaseCharacterC : public ACharacter, public IInterface_Character
 {
 	GENERATED_BODY()
 
@@ -23,20 +26,11 @@ public:
     
     // Called to bind functionality to input
     	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-    	
-    	
-    	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "References")
+	
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "References")
 	class UAnimInstance* MainAnimInstance = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input System")
-	EALSRotationMode DesiredRotationMode = EALSRotationMode::LookingDirection;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input System")
-	EALSGait DesiredGait = EALSGait::Sprinting;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input System")
-	EALSStance DesiredStance = EALSStance::Standing;
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input System")
 	 float LookLeftRightRate = 1.25;
 
@@ -53,13 +47,13 @@ public:
 	bool SprintHeld = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Essential Information")
-	FVector Acceleration = FVector(0.0f);
+	FVector CPPAcceleration = FVector(0.0f);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Essential Information")
-	bool IsMoving = false;
+	bool CPPIsMoving = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Essential Information")
-	bool HasMovementInput = false;
+	bool CPPHasMovementInput = false;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Essential Information")
 	FRotator LastVelocityRotation = FRotator(0.0f);
@@ -68,13 +62,13 @@ public:
 	FRotator LastMovementInputRotation = FRotator(0.0f);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Essential Information")
-	float Speed = 0.f;
+	float CPPSpeed = 0.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Essential Information")
-	float MovementInputAmount = 0.f;
+	float CPPMovementInputAmount = 0.f;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Essential Information")
-	float AimYawRate = 0.f;
+	float CPPAimYawRate = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera System")
 	float ThirdPersonFOV = 90.f;
@@ -85,29 +79,41 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera System")
 	bool RightShoulder = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input System")
+	EALSMovementAction EMovementAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input System")
+	EALSRotationMode EDesiredRotationMode = EALSRotationMode::LookingDirection;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input System")
+	EALSGait EDesiredGait = EALSGait::Sprinting;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input System")
+	EALSStance EDesiredStance = EALSStance::Standing;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State Values")
 	EALSMovementState MovementState = EALSMovementState::None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State Values")
-	EALSMovementState PrevMovementState = EALSMovementState::None;
+	EALSMovementState EPrevMovementState = EALSMovementState::None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State Values")
-	EALSMovementState MovementAction = EALSMovementState::None;
+	EALSMovementState EMovementState = EALSMovementState::None;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State Values")
-	EALSRotationMode RotationMode = EALSRotationMode::LookingDirection;
+	EALSRotationMode ERotationMode = EALSRotationMode::LookingDirection;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State Values")
-	EALSGait Gait = EALSGait::Walking;
+	EALSGait EGait = EALSGait::Walking;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State Values")
-	EALSStance Stance = EALSStance::Standing;
+	EALSStance EStance = EALSStance::Standing;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State Values")
-	EALSViewMode ViewMode = EALSViewMode::ThirdPerson;
+	EALSViewMode EViewMode = EALSViewMode::ThirdPerson;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Values")
-	EALSOverlayState OverlayState = EALSOverlayState::Default;
+	EALSOverlayState EOverlayState = EALSOverlayState::Default;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement System")
 	FDataTableRowHandle MovementModel;
@@ -165,7 +171,15 @@ public:
 	float PreviousAimYaw = 0.f;
 
 
+	//Interfaces declrations.
 
+	void GetCharacterCurrentStats(EMovementMode& PawnMovementMode, EALSMovementState& IMovementState, EALSMovementState& PrevMovementState,
+									EALSMovementAction& MovementAction, EALSRotationMode& RotationMode, EALSGait& ActualGait, EALSStance& ActualStance,
+									EALSViewMode& ViewMode, EALSOverlayState& OverlayState);
+
+	void GetEssentialInformation(FVector& Velocity, FVector& Acceleration, FVector& MovementInput, bool& IsMoving
+									, bool& HasMovementInput, float& Speed, float& MovementInputAmount, FRotator& AimingRotation, float& AimYawRate);
+	
 	UFUNCTION()
 	void OnBeginPlay();
 
@@ -178,7 +192,5 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	
 
 };

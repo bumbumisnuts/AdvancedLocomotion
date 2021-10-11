@@ -82,3 +82,24 @@ struct FMantle_TraceSettings
 	UPROPERTY(BlueprintReadWrite)
 	float DownwardTraceRadius = 0.f;
 };
+
+USTRUCT(BlueprintType)
+struct FDynamicMontageParams
+{
+	GENERATED_BODY()
+	
+	UPROPERTY()
+	UAnimSequenceBase* Animation;
+	
+	UPROPERTY()
+	float BlendInTime;
+	
+	UPROPERTY()
+	float BlendOutTime;
+	
+	UPROPERTY()
+	float PlayRate;
+	
+	UPROPERTY()
+	float StartTime;
+};
