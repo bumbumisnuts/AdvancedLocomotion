@@ -4,6 +4,7 @@
 #include "ALSController.h"
 #include "Blueprint/UserWidget.h"
 #include "ALSBaseCharacterC.h"
+#include "CPlayerCameraManager.h"
 #include "ToolBuilderUtil.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -17,6 +18,16 @@ void AALSController::OnPossess(APawn* MovieSceneBlends)
 void AALSController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
+
+	
+}
+
+void AALSController::OnUnPossess()
+{
+	Super::OnUnPossess();
+	
+
+	ACPlayerCameraManager* CustomPlayer = Cast<ACPlayerCameraManager>(PlayerCameraManager);
 
 	
 }

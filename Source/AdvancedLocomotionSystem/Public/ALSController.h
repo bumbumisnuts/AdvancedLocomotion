@@ -34,6 +34,8 @@ class ADVANCEDLOCOMOTIONSYSTEM_API AALSController : public APlayerController
 
 	virtual void SetupInputComponent() override;
 
+	virtual void OnUnPossess() override;
+
 	protected:
 	virtual void BeginPlay() override;
 
