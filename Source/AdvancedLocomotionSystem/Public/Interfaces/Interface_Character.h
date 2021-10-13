@@ -41,5 +41,6 @@ public:
 									EALSViewMode& ViewMode, EALSOverlayState& OverlayState);
 
 	void GetEssentialInformation(FVector& Velocity, FVector& Acceleration, FVector& MovementInput, bool& IsMoving
-									, bool& HasMovementInput, float& Speed, float& MovementInputAmount, FRotator& AimingRotation, float& AimYawRate);
+									, bool& HasMovementInput, float& Speed,
+									float& MovementInputAmount, FRotator& AimingRotation, float& AimYawRate);
 };
