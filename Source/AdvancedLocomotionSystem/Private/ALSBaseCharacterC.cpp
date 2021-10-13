@@ -2,8 +2,13 @@
 
 
 #include "ALSBaseCharacterC.h"
+
+#include "Interface_Animation.h"
+#include "K2Node_GetDataTableRow.h"
 #include "MacroLibrary.h"
+#include "ChaosSolverEngine/Public/Chaos/ChaosGameplayEventDispatcher.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -58,6 +63,29 @@ void AALSBaseCharacterC::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 }
 
 
+void AALSBaseCharacterC::Get3PTraceParams(FVector& TraceOrigin, float& TraceRadius, ETraceTypeQuery& TraceChannel)
+{
+	TraceOrigin = GetActorLocation();
+	TraceRadius = 10.f;
+	//TraceChannel = ECC_Visibility
+}
+
+void AALSBaseCharacterC::GetCameraParameters(float& TP_FOV, float& FP_FOV, bool& RightShoulder)
+{
+	TP_FOV = ThirdPersonFOV;
+	FP_FOV = FirstPersonFOV;
+	RightShoulder = CharacterRightShoulder;
+}
+
+void AALSBaseCharacterC::GetCameraTargets(FVector& Target)
+{
+	Target = GetMesh()->GetSocketLocation(TEXT("FP_Camera"));
+}
+
+void AALSBaseCharacterC::GetFPCameraTarget(FTransform& Transform)
+{
+	
+}
 
 void AALSBaseCharacterC::GetCharacterCurrentStats(EMovementMode& PawnMovementMode, EALSMovementState& IMovementState,
                                                   EALSMovementState& PrevMovementState, EALSMovementAction& MovementAction, EALSRotationMode& RotationMode,
@@ -107,15 +135,137 @@ void AALSBaseCharacterC::OnBeginPlay()
 
 	//Set the Movement Model
 	SetMovementModel();
+
+
+
+	//Update states to use the initial desired values.
 	
+	OnGaitChanged(EDesiredGait);
+
+	OnRotationChanged(EDesiredRotationMode);
+
+	OnViewModeChanged(EViewMode);
+
+	OnOverlayStateChanged(EOverlayState);
+
+
+	switch (EDesiredStance)
+	{
+
+		case EALSStance::Standing:
+
+			GetCharacterMovement()->UnCrouch();
+		break;
+
+		case EALSStance::Crouching:
+
+			GetCharacterMovement()->Crouch();
+
+		break;
+	}
+
+
+
+	//Set default rotation values.
+
+	TargetRotation = GetActorRotation();
+	LastVelocityRotation = GetActorRotation();
+	LastMovementInputRotation = GetActorRotation();
+	
+}
+
+void AALSBaseCharacterC::SetFriction()
+{
+	GetCharacterMovement()->BrakingFriction = 0.0f;
 }
 
 void AALSBaseCharacterC::SetMovementModel()
 {
-	
+	 // MoveMentSettings = DataTableRow->FindRow<FMovementSettings>(TEXT("Normal"));
 }
 
 void AALSBaseCharacterC::OnGaitChanged(EALSGait NewactualGait)
 {
 	
+}
+
+void AALSBaseCharacterC::OnRotationChanged(EALSRotationMode NewRotaionMode)
+{
+	
+}
+
+void AALSBaseCharacterC::OnViewModeChanged(EALSViewMode NewViewMode)
+{
+}
+
+void AALSBaseCharacterC::OnOverlayStateChanged(EALSOverlayState NewOverlayState)
+{
+	
+}
+
+void AALSBaseCharacterC::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+	
+	
+}
+
+void AALSBaseCharacterC::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+
+	
+	if (BreakFall)
+	{
+		
+	}else
+	{
+		FLatentActionInfo LatentActionInfo;
+		LatentActionInfo.ExecutionFunction = "SetFriction";
+		
+		if (CPPHasMovementInput)
+		{
+			GetCharacterMovement()->BrakingFriction = 0.5f;
+			UKismetSystemLibrary::RetriggerableDelay(GetWorld(), 0.5, LatentActionInfo);
+
+		}
+		else
+		{
+			GetCharacterMovement()->BrakingFriction = 3.0f;
+
+			UKismetSystemLibrary::RetriggerableDelay(GetWorld(), 0.5, LatentActionInfo);
+			
+		}	
+	}
+}
+
+void AALSBaseCharacterC::OnJumped_Implementation()
+{
+	Super::OnJumped_Implementation();
+
+	if (CPPSpeed > 100.f)
+	{
+		InAirRotation = LastVelocityRotation;
+		if (MainAnimInstance)
+		{
+			IInterface_Animation* Interface_Animation = Cast<IInterface_Animation>(MainAnimInstance);
+			if (Interface_Animation)
+			{
+				Interface_Animation->Jumped();
+			}
+		}
+	}
+	else
+	{
+		InAirRotation = GetActorRotation();
+
+		if (MainAnimInstance)
+		{
+			IInterface_Animation* Interface_Animation = Cast<IInterface_Animation>(MainAnimInstance);
+			if (Interface_Animation)
+			{
+				Interface_Animation->Jumped();
+			}
+		}
+	}
 }

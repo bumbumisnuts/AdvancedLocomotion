@@ -24,4 +24,12 @@ class ADVANCEDLOCOMOTIONSYSTEM_API IInterface_Camera
 public:
 
 	void GetCameraParameters(float& TP_FOV, float& FP_FOV, bool& RightShoulder);
+
+	void GetCameraTargets(FVector& Target);
+
+	void GetFPCameraTarget(FTransform& Transform);
+
+	void Get3PTraceParams(FVector& TraceOrigin, float& TraceRadius, ETraceTypeQuery& TraceChannel);
+
+	
 };

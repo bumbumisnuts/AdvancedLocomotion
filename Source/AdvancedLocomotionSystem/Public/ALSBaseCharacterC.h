@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Enums.h"
+#include "Interface_Camera.h"
 #include "Interface_Character.h"
 #include "Structs.h"
 #include "Engine/DataTable.h"
@@ -13,7 +14,7 @@
 
 
 UCLASS()
-class ADVANCEDLOCOMOTIONSYSTEM_API AALSBaseCharacterC : public ACharacter, public IInterface_Character
+class ADVANCEDLOCOMOTIONSYSTEM_API AALSBaseCharacterC : public ACharacter, public IInterface_Character, public IInterface_Camera
 {
 	GENERATED_BODY()
 
@@ -77,7 +78,7 @@ public:
 	float FirstPersonFOV = 90.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera System")
-	bool RightShoulder = false;
+	bool CharacterRightShoulder = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input System")
 	EALSMovementAction EMovementAction;
@@ -116,7 +117,9 @@ public:
 	EALSOverlayState EOverlayState = EALSOverlayState::Default;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement System")
-	FDataTableRowHandle MovementModel;
+	UDataTable* DataTableRow;
+
+	FDataTableRowHandle* Rowhandle;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement System")
 	FMovementSettings MoveMentSettings;
@@ -173,6 +176,14 @@ public:
 
 	//Interfaces declrations.
 
+	void Get3PTraceParams(FVector& TraceOrigin, float& TraceRadius, ETraceTypeQuery& TraceChannel);
+
+	void GetCameraParameters(float& TP_FOV, float& FP_FOV, bool& RightShoulder);
+
+	void GetCameraTargets(FVector& Target);
+
+	void GetFPCameraTarget(FTransform& Transform);
+
 	void GetCharacterCurrentStats(EMovementMode& PawnMovementMode, EALSMovementState& IMovementState, EALSMovementState& PrevMovementState,
 									EALSMovementAction& MovementAction, EALSRotationMode& RotationMode, EALSGait& ActualGait, EALSStance& ActualStance,
 									EALSViewMode& ViewMode, EALSOverlayState& OverlayState);
@@ -183,12 +194,28 @@ public:
 	UFUNCTION()
 	void OnBeginPlay();
 
+	void SetFriction();
+
 	UFUNCTION()
 	void SetMovementModel();
 
 	UFUNCTION()
 	void OnGaitChanged(EALSGait NewactualGait);
 
+	void OnRotationChanged(EALSRotationMode NewRotaionMode);
+
+	void OnViewModeChanged(EALSViewMode NewViewMode);
+
+	void OnOverlayStateChanged(EALSOverlayState NewOverlayState);
+
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
+
+	virtual void Landed(const FHitResult& Hit) override;
+
+	virtual void OnJumped_Implementation() override;
+	
+	
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
