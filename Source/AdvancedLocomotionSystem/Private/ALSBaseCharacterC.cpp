@@ -3,10 +3,9 @@
 
 #include "ALSBaseCharacterC.h"
 
-#include "Interface_Animation.h"
-#include "K2Node_GetDataTableRow.h"
-#include "MacroLibrary.h"
-#include "ChaosSolverEngine/Public/Chaos/ChaosGameplayEventDispatcher.h"
+#include "Interfaces/Interface_Animation.h"
+#include "Data/MacroLibrary.h"
+#include "Data/Enums.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 

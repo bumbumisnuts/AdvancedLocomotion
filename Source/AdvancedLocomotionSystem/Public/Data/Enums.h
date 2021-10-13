@@ -70,3 +70,10 @@ enum class EALSMovementAction : uint8
 	Rolling		UMETA(DsiplayName = "Rolling"),
 	GettingUp	UMETA(DisplayName = "GettingUp")
 };
+
+UENUM(BlueprintType, Category = "MovementMode")
+enum class EGroundedEntryState : uint8
+{
+	None		UMETA(DisplayName = "None"),
+	Roll		UMETA(DisplayName = "Roll")
+};

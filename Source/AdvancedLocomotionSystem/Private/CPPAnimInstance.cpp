@@ -2,8 +2,6 @@
 
 
 #include "CPPAnimInstance.h"
-
-
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -40,4 +38,9 @@ void UCPPAnimInstance::GetEssentialInformation(FVector& Velocity, FVector& Accel
 	A_MovementInputAmount = MovementInputAmount;
 	A_AimingRotation = AimingRotation;
 	A_AimYawRate = AimYawRate;
+}
+
+void UCPPAnimInstance::SetOverlayState(int32 OverlayState)
+{
+	A_Overlaystate = OverlayState;
 }

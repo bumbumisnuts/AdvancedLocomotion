@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Enums.h"
+#include "Data/Enums.h"
 #include "UObject/Interface.h"
 #include "Interface_Character.generated.h"
 
@@ -23,24 +23,24 @@ class ADVANCEDLOCOMOTIONSYSTEM_API IInterface_Character
 public:
 
 
-	void SetMovementStats(EALSMovementState MovementState);
+	virtual void SetMovementStats(EALSMovementState MovementState);
 
-	void SetMovementAction(EALSMovementAction NewMovementAction);
+	virtual void SetMovementAction(EALSMovementAction NewMovementAction);
 
-	void SetRotationMode(EALSRotationMode NewRotation);
+	virtual void SetRotationMode(EALSRotationMode NewRotation);
 
-	void SetGaitMode(EALSGait NewGait);
+	virtual void SetGaitMode(EALSGait NewGait);
 
-	void SetViewMode(EALSViewMode NewViewMode);
+	virtual void SetViewMode(EALSViewMode NewViewMode);
 
-	void SetOverlayState(EALSOverlayState NewOverlayState);
+	virtual void SetOverlayState(EALSOverlayState NewOverlayState);
 
 	
-	void GetCharacterCurrentStats(EMovementMode& PawnMovementMode, EALSMovementState& IMovementState, EALSMovementState& PrevMovementState,
+	virtual void GetCharacterCurrentStats(EMovementMode& PawnMovementMode, EALSMovementState& IMovementState, EALSMovementState& PrevMovementState,
 									EALSMovementAction& MovementAction, EALSRotationMode& RotationMode, EALSGait& ActualGait, EALSStance& ActualStance,
 									EALSViewMode& ViewMode, EALSOverlayState& OverlayState);
 
-	void GetEssentialInformation(FVector& Velocity, FVector& Acceleration, FVector& MovementInput, bool& IsMoving
+	virtual void GetEssentialInformation(FVector& Velocity, FVector& Acceleration, FVector& MovementInput, bool& IsMoving
 									, bool& HasMovementInput, float& Speed,
 									float& MovementInputAmount, FRotator& AimingRotation, float& AimYawRate);
 };

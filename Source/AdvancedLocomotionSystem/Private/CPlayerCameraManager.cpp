@@ -3,7 +3,7 @@
 
 #include "CPlayerCameraManager.h"
 #include "CameraAnimInstance.h"
-#include "Interface_Camera.h"
+#include "Interfaces/Interface_Camera.h"
 
 ACPlayerCameraManager::ACPlayerCameraManager()
 {
@@ -29,17 +29,20 @@ bool ACPlayerCameraManager::BlueprintUpdateCamera(AActor* CameraTarget, FVector&
 	if (CameraTarget->ActorHasTag(TEXT("ALS_Character")))
 	{
 		CustomCameraBehavior(NewCameraLocation, NewCameraRotation, NewCameraFOV);
-	}else
+		return true;
+		
+	}
+	else
 	{
 		Super::BlueprintUpdateCamera(CameraTarget, NewCameraLocation, NewCameraRotation, NewCameraFOV);
+		return  false;
 	}	
 }
 
 void ACPlayerCameraManager::CustomCameraBehavior(FVector& Location, FRotator& Rotation, float& FOV)
 {
-	IInterface_Camera* INTRef;
-
-	INTRef = Cast<IInterface_Camera>(ControlledPawn_Manager);
+	
+	IInterface_Camera* INTRef = Cast<IInterface_Camera>(ControlledPawn_Manager);
 	if (INTRef)
 	{
 		INTRef->GetFPCameraTarget(PivotTransform);

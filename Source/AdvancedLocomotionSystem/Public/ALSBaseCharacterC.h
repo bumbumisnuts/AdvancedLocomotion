@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Enums.h"
-#include "Interface_Camera.h"
-#include "Interface_Character.h"
-#include "Structs.h"
+#include "Data/Enums.h"
+#include "Data/Structs.h"
 #include "Engine/DataTable.h"
+#include "Interfaces/Interface_Camera.h"
+#include "Interfaces/Interface_Character.h"
 #include "ALSBaseCharacterC.generated.h"
 
 
@@ -176,20 +176,20 @@ public:
 
 	//Interfaces declrations.
 
-	void Get3PTraceParams(FVector& TraceOrigin, float& TraceRadius, ETraceTypeQuery& TraceChannel);
+	virtual void Get3PTraceParams(FVector& TraceOrigin, float& TraceRadius, ETraceTypeQuery& TraceChannel) override;
 
-	void GetCameraParameters(float& TP_FOV, float& FP_FOV, bool& RightShoulder);
+	virtual void GetCameraParameters(float& TP_FOV, float& FP_FOV, bool& RightShoulder) override;
 
-	void GetCameraTargets(FVector& Target);
+	virtual void GetCameraTargets(FVector& Target) override;
 
-	void GetFPCameraTarget(FTransform& Transform);
+	virtual void GetFPCameraTarget(FTransform& Transform) override;
 
-	void GetCharacterCurrentStats(EMovementMode& PawnMovementMode, EALSMovementState& IMovementState, EALSMovementState& PrevMovementState,
-									EALSMovementAction& MovementAction, EALSRotationMode& RotationMode, EALSGait& ActualGait, EALSStance& ActualStance,
-									EALSViewMode& ViewMode, EALSOverlayState& OverlayState);
+	virtual void GetCharacterCurrentStats(EMovementMode& PawnMovementMode, EALSMovementState& IMovementState, EALSMovementState& PrevMovementState,
+	                                      EALSMovementAction& MovementAction, EALSRotationMode& RotationMode, EALSGait& ActualGait, EALSStance& ActualStance,
+	                                      EALSViewMode& ViewMode, EALSOverlayState& OverlayState) override;
 
-	void GetEssentialInformation(FVector& Velocity, FVector& Acceleration, FVector& MovementInput, bool& IsMoving
-									, bool& HasMovementInput, float& Speed, float& MovementInputAmount, FRotator& AimingRotation, float& AimYawRate);
+	virtual void GetEssentialInformation(FVector& Velocity, FVector& Acceleration, FVector& MovementInput, bool& IsMoving
+	                                     , bool& HasMovementInput, float& Speed, float& MovementInputAmount, FRotator& AimingRotation, float& AimYawRate) override;
 	
 	UFUNCTION()
 	void OnBeginPlay();

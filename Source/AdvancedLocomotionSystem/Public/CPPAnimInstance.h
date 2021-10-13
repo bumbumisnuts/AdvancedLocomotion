@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Interfaces/Interface_Animation.h"
 #include "CPPAnimInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ADVANCEDLOCOMOTIONSYSTEM_API UCPPAnimInstance : public UAnimInstance
+class ADVANCEDLOCOMOTIONSYSTEM_API UCPPAnimInstance : public UAnimInstance, public IInterface_Animation
 {
 	GENERATED_BODY()
 
@@ -46,17 +47,20 @@ class ADVANCEDLOCOMOTIONSYSTEM_API UCPPAnimInstance : public UAnimInstance
 
 	float A_AimYawRate;
 
-
-
+	int32 A_Overlaystate = 0;
+	
 	
 	
 	virtual void NativeInitializeAnimation() override;
 
-	void Jumped();
+	virtual void Jumped() override;
 
 	void GetEssentialInformation(FVector& Velocity, FVector& Acceleration, FVector& MovementInput, bool& IsMoving
 									, bool& HasMovementInput, float& Speed,
 									float& MovementInputAmount, FRotator& AimingRotation, float& AimYawRate);
+
+	virtual void SetOverlayState(int32 GroundedEntryState) override;
+
 
 	
 };

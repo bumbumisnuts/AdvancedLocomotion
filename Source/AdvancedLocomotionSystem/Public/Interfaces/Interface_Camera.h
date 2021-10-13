@@ -23,13 +23,13 @@ class ADVANCEDLOCOMOTIONSYSTEM_API IInterface_Camera
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	void GetCameraParameters(float& TP_FOV, float& FP_FOV, bool& RightShoulder);
+	virtual void GetCameraParameters(float& TP_FOV, float& FP_FOV, bool& RightShoulder);
 
-	void GetCameraTargets(FVector& Target);
+	virtual void GetCameraTargets(FVector& Target);
 
-	void GetFPCameraTarget(FTransform& Transform);
+	virtual void GetFPCameraTarget(FTransform& Transform);
 
-	void Get3PTraceParams(FVector& TraceOrigin, float& TraceRadius, ETraceTypeQuery& TraceChannel);
+	virtual void Get3PTraceParams(FVector& TraceOrigin, float& TraceRadius, ETraceTypeQuery& TraceChannel);
 
 	
 };

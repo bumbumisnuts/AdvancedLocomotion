@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/Enums.h"
 #include "UObject/Interface.h"
 #include "Interface_Animation.generated.h"
 
@@ -24,5 +25,9 @@ class ADVANCEDLOCOMOTIONSYSTEM_API IInterface_Animation
 public:
 
 
-	void Jumped();
+	virtual void Jumped();
+
+	virtual void SetOverlayState(int32 OverlayState);
+
+	
 };
