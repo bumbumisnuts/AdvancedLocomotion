@@ -3,7 +3,6 @@
 
 #include "CPPAnimInstance.h"
 
-#include <concrt.h>
 
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
