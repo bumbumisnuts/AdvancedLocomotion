@@ -3,6 +3,7 @@
 
 #include "ALSBaseCharacterC.h"
 
+#include "Chaos/BoundingVolume.h"
 #include "Interfaces/Interface_Animation.h"
 #include "Data/MacroLibrary.h"
 #include "Data/Enums.h"
@@ -154,13 +155,12 @@ void AALSBaseCharacterC::OnBeginPlay()
 		case EALSStance::Standing:
 
 			GetCharacterMovement()->UnCrouch();
-		break;
+			break;
 
 		case EALSStance::Crouching:
 
 			GetCharacterMovement()->Crouch();
-
-		break;
+			break;
 	}
 
 
@@ -205,7 +205,30 @@ void AALSBaseCharacterC::OnOverlayStateChanged(EALSOverlayState NewOverlayState)
 void AALSBaseCharacterC::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+
+	switch (PrevMovementMode)
+	{
+		case EMovementMode::MOVE_Walking:
+			SetMovementStats(EALSMovementState::Grounded);
+			break;
+		
+		case EMovementMode::MOVE_NavWalking:
+			SetMovementStats(EALSMovementState::Grounded);
+			break;
+
+		case EMovementMode::MOVE_Falling:
+			SetMovementStats(EALSMovementState::InAir);
+			break;
+
+
+		default:
+			;
+	}
 	
+}
+
+void AALSBaseCharacterC::OnCharactermovementModeChanged(EMovementMode NewMovementMode)
+{
 	
 }
 
@@ -268,3 +291,31 @@ void AALSBaseCharacterC::OnJumped_Implementation()
 		}
 	}
 }
+
+void AALSBaseCharacterC::BreakFallEvent()
+{
+	if (MainAnimInstance)
+	{
+		MainAnimInstance->Montage_Play(GetRollAnimation(), 1.35f);
+	}
+}
+
+void AALSBaseCharacterC::RollEvent()
+{
+	if (MainAnimInstance)
+	{
+		MainAnimInstance->Montage_Play(GetRollAnimation(), 1.15f);
+	}
+}
+
+
+UAnimMontage* AALSBaseCharacterC::GetRollAnimation()
+{
+	
+}
+
+
+
+
+
+

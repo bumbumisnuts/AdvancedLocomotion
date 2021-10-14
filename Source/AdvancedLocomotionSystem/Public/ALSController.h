@@ -15,6 +15,10 @@ class ADVANCEDLOCOMOTIONSYSTEM_API AALSController : public APlayerController
 
 	public:
 
+
+	bool IsOverlayOpen;
+
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AALSBaseCharacterC> CharacterClass;
 
@@ -36,9 +40,12 @@ class ADVANCEDLOCOMOTIONSYSTEM_API AALSController : public APlayerController
 
 	virtual void OnUnPossess() override;
 
+	
+
 	protected:
 	virtual void BeginPlay() override;
 
+	void OpenOverlayMenu();
 	
 	
 };

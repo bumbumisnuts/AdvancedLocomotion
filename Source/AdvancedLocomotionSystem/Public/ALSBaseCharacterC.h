@@ -209,11 +209,18 @@ public:
 	void OnOverlayStateChanged(EALSOverlayState NewOverlayState);
 
 	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
+	
+	void OnCharactermovementModeChanged(EMovementMode NewMovementMode);
 
 	virtual void Landed(const FHitResult& Hit) override;
 
 	virtual void OnJumped_Implementation() override;
-	
+
+	void BreakFallEvent();
+
+	void RollEvent();
+
+	virtual UAnimMontage* GetRollAnimation();
 	
 	
 protected:
