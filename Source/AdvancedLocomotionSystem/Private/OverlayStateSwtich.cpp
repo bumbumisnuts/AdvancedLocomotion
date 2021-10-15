@@ -4,8 +4,6 @@
 #include "OverlayStateSwtich.h"
 
 #include "interfaces/Interface_Character.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "Kismet/KismetStringLibrary.h"
 #include "Kismet/KismetTextLibrary.h"
 
 void UOverlayStateSwtich::NativeConstruct()
@@ -54,4 +52,13 @@ void UOverlayStateSwtich::CreateButtons()
 
 void UOverlayStateSwtich::UpdateButtonFocus()
 {
+
+	for (EALSOverlayState Overlay : TEnumRange<EALSOverlayState>())
+	{
+
+
+		
+	}
+	
+	
 }
